@@ -2,6 +2,7 @@ package ru.appcommerce.mapkittaxi.presentation.feature.map
 
 import androidx.lifecycle.viewModelScope
 import com.yandex.mapkit.geometry.Point
+import com.yandex.mapkit.location.Location
 import com.yandex.mapkit.search.SuggestItem
 import kotlinx.coroutines.launch
 import ru.appcommerce.mapkittaxi.data.datasource.RouteRemoteDatasource
@@ -35,6 +36,14 @@ class MapViewModel(
                     MapUiModel.ErrorResult(result.message)
                 )
             }
+        }
+        getMyLocation()
+    }
+
+    private fun getMyLocation() {
+        viewModelScope.launch {
+            val requestPoint = routeRemoteDatasource.getMyLocation()
+            pushState(MapUiModel.MyLocation(requestPoint.point))
         }
     }
 

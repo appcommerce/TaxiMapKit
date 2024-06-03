@@ -27,7 +27,7 @@ class RouteRemoteDatasource {
 
     private val drivingRoute = DirectionsFactory.getInstance().createDrivingRouter(DrivingRouterType.COMBINED)
 
-    private suspend fun getMyLocation() = suspendCancellableCoroutine {
+    suspend fun getMyLocation() = suspendCancellableCoroutine {
         MapKitFactory.getInstance().createLocationManager().requestSingleUpdate(object :
             LocationListener {
             override fun onLocationUpdated(location: Location) {
@@ -38,7 +38,10 @@ class RouteRemoteDatasource {
     }
 
     suspend fun requestRoutes(toPoint: Point) {
-        val waypoints = listOf(RequestPoint(toPoint, RequestPointType.WAYPOINT, null, null), getMyLocation())
+        val waypoints = listOf(
+            getMyLocation(),
+            RequestPoint(toPoint, RequestPointType.WAYPOINT, null, null)
+        )
         drivingRoute.requestRoutes(
             waypoints,
             DrivingOptions().apply { routesCount = 1 },

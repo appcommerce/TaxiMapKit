@@ -10,6 +10,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.geometry.Polyline
+import com.yandex.mapkit.map.CameraPosition
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.appcommerce.mapkittaxi.R
 import ru.appcommerce.mapkittaxi.databinding.FragmentMapBinding
@@ -26,7 +27,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.suggestField.apply {
             setAdapter(suggestAdapter)
             setOnItemClickListener { _, _, i, _ ->
@@ -52,6 +52,11 @@ class MapFragment : BaseFragment<MapViewModel>() {
         when(state) {
             is MapUiModel.SuggestItems -> suggestAdapter.setData(state.suggestItems)
             is MapUiModel.PolylineGeo -> drawPolyline(state.points)
+            is MapUiModel.MyLocation -> binding.mapview.mapWindow.map.apply {
+                move(
+                    CameraPosition(state.point, 13.0f, 0f, 0f)
+                )
+            }
             else -> Unit
         }
     }
