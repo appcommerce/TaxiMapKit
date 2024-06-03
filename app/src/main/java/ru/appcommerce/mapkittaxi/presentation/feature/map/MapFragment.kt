@@ -1,14 +1,17 @@
 package ru.appcommerce.mapkittaxi.presentation.feature.map
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.geometry.Polyline
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.appcommerce.mapkittaxi.R
 import ru.appcommerce.mapkittaxi.databinding.FragmentMapBinding
 import ru.appcommerce.mapkittaxi.presentation.base.BaseFragment
 import ru.appcommerce.mapkittaxi.presentation.states.UiEvent
@@ -48,16 +51,16 @@ class MapFragment : BaseFragment<MapViewModel>() {
     override fun processState(state: UiState) {
         when(state) {
             is MapUiModel.SuggestItems -> suggestAdapter.setData(state.suggestItems)
-            is MapUiModel.Waypoints -> drawPolyline(state.points)
+            is MapUiModel.PolylineGeo -> drawPolyline(state.points)
             else -> Unit
         }
     }
 
-    private fun drawPolyline(points: List<Point>) {
-        if (points.isEmpty()) return
-        binding.mapview.mapWindow.map.mapObjects.addPolyline(
-            Polyline(points)
-        )
+    private fun drawPolyline(polylines: List<Polyline>) {
+        if (polylines.isEmpty()) return
+        polylines.forEach {
+            binding.mapview.mapWindow.map.mapObjects.addPolyline(it)
+        }
     }
 
     override fun processEvent(event: UiEvent) {

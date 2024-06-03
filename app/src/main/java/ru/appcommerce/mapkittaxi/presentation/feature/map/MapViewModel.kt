@@ -19,7 +19,7 @@ class MapViewModel(
         routeRemoteDatasource.route.observeForever { result ->
             when(result) {
                 is RouteResult.Success -> pushState(
-                    MapUiModel.Waypoints(result.routes.map { it.point })
+                    MapUiModel.PolylineGeo(result.routes)
                 )
                 is RouteResult.Error -> pushEvent(
                     MapUiModel.ErrorResult(result.message)

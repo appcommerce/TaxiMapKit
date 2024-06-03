@@ -41,11 +41,11 @@ class RouteRemoteDatasource {
         val waypoints = listOf(RequestPoint(toPoint, RequestPointType.WAYPOINT, null, null), getMyLocation())
         drivingRoute.requestRoutes(
             waypoints,
-            DrivingOptions().apply { routesCount = 10 },
+            DrivingOptions().apply { routesCount = 1 },
             VehicleOptions(),
             object : DrivingSession.DrivingRouteListener {
                 override fun onDrivingRoutes(route: MutableList<DrivingRoute>) {
-                    val routePosition = route.map { it.routePosition }
+                    val routePosition = route.map { it.geometry }
                     _route.postValue(RouteResult.Success(routePosition))
                 }
                 override fun onDrivingRoutesError(error: Error) {
