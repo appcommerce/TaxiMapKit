@@ -83,4 +83,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
             binding.mapview.mapWindow.map.visibleRegion.topRight
         )
     }
+
+    override fun searchActionIfEmpty() {
+        super.searchActionIfEmpty()
+        binding.mapview.mapWindow.map.mapObjects.clear()
+    }
 }
